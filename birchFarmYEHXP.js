@@ -11,7 +11,7 @@ const sapling = "minecraft:birch_sapling";
 
 var chopLocation = 0; 
 
-var line = 27;
+var line = 0;
 
 function chop()
 {
