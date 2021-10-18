@@ -20,8 +20,8 @@ const zSouth = 6317;
 // you set the x coordinate to be -54 and the z coordinate to be 140.5. 
 // Image link of Journey Map as Example: https://i.imgur.com/hVtm28d.png
 
-const xChest = -4566;
-const zChest = 6317;
+//const xChest = -4566;
+//const zChest = 6317;
 
 // NOTE: The crop and food constants have been modified such that they now take in the item's ID. 
 // Website for list of unit IDs in minecraft: https://minecraftitemids.com/
@@ -41,7 +41,7 @@ var selectedHotBarSlot = 0;
 
 // YOU CAN CHANGE THIS BELOW:
 
-var line = 56;
+var line = 0;
 
 // The amount of time that is added everytime you go back to the chest, 
 // so the bot can wait and render the chunk the chest is located in.
@@ -204,7 +204,7 @@ function beetrootCount()
 
 function dumpSeeds()
 {
-  p.lookAt(135,-15);
+  p.lookAt(90,-15);
   Client.waitTick();
   
   const inv = Player.openInventory()
@@ -316,13 +316,6 @@ function dumpCrops()
     for (let i = 9; i < 45; i++)
     {
         if (inv.getSlot(i).getItemID() == "minecraft:beetroot")
-        {
-            inv.click(i);
-            Client.waitTick();
-            inv.click(-999);
-            Client.waitTick();
-        }
-        else if (inv.getSlot(i).getItemID() == crop)
         {
             inv.click(i);
             Client.waitTick();
@@ -485,7 +478,7 @@ function farmLines()
     {        
         if(checkInventory() >= 36)
         {
-            if(beetrootCount() >= 27)
+            if(beetrootCount() >= 21)
             {
                 //goToChest();
                 
@@ -494,7 +487,7 @@ function farmLines()
             else
             {
                 dumpSeeds();
-                Time.sleep(1000);
+                Client.waitTick(20);
             }
         }
         else
@@ -513,13 +506,13 @@ function farmLines()
             
             var newLine = line + 1;
             
-            if (newLine == 117)
+            if (newLine == 107)
             {
         
                 KeyBind.keyBind("key.forward", false);
                 KeyBind.keyBind("key.attack", false);
                 end();
-                Time.sleep(11000);
+                Client.waitTick(220);
             }
             
             Chat.log("Row "+ line +" finished! Moving on to row "+ newLine +"!");
