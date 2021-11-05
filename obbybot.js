@@ -1,17 +1,14 @@
 /*
-MechanicalRift's Obisdian Bot 2.1.3
+MechanicalRift's Obisdian Bot 2.1.4
 What it do: The Script automatically places string in a generator and breaks the obby that is generated
 Modifications:
-
 BUGS:
-*/
 
-/*
 requirements: the Obby_Grinder Schematic for litematica
 Pickaxe must be in the first hotbar slot
 */
 const food="minecraft:baked_potato"; //what the food is
-const foodlevel=5; //the amount of hunger the food gives
+const foodlevel=5; //the amount of hunger the food gives. Set to 0 if you want the player to eat imediately after losing .5 of a bar of
 
 const player=Player.getPlayer();
 
@@ -20,7 +17,6 @@ what type of pickaxe you are using:
 diamond pick: "minecraft:diamond_pickaxe"
 netherite pick: "minecraft:netherite_pickaxe"
 */
-
 const pickaxe="minecraft:diamond_pickaxe";
 
 //want the bot to msg you when your main account are out of string? switch the false to true and change the username
@@ -30,7 +26,7 @@ const username="Username Here";
 //if you want your bot to leave when there is no string left
 const leavecheck=true;
 
-const pickaxeenchantment="de5";
+const pickaxeenchantment="de4";
 
 /*
 You are gonna need to change this manually
@@ -54,57 +50,51 @@ let pickstringcheck=true;
 
 function InvCheck()//checks inventory for string
 {
-    
-
-        KeyBind.key("key.mouse.right", true);
-        KeyBind.key("key.mouse.right", false);
-        Client.waitTick(20);
-        const inv = Player.openInventory();
-        var count = 0;
-        for (let x = 0; x < 90; ++x)
+    KeyBind.key("key.mouse.right", true);
+    KeyBind.key("key.mouse.right", false);
+    Client.waitTick(20);
+    const inv = Player.openInventory();
+    var count = 0;
+    for (let x = 0; x < 90; ++x)
+    {
+        if (inv.getSlot(x).getItemID() === "minecraft:string") 
         {
-          if (inv.getSlot(x).getItemID() === "minecraft:string") 
-          {
             count++;//checks both inventories for string
-          }
         }
-        inv.close();
-        Client.waitTick();
-        if(count>0)//if false ends the script
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+    }
+    inv.close();
+    Client.waitTick();
+    if(count>0)//if false ends the script
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 
 
 }
 
-
-function EatFood()//eats only when the food will be most optimal
+function EatFood()//only eats at the most optimal
 {
-    player.lookAt(0, 90);
+    player.lookAt(0, -90);
     Client.waitTick();
     const inv = Player.openInventory();
     inv.setSelectedHotbarSlotIndex(1);
-    
-    KeyBind.key("key.mouse.right",true);
-    
-    while (true)
+    KeyBind.keyBind("key.use", true);
+    while (true) 
     {
-        if (player.getFoodLevel() >= (20-foodlevel))//true if eating is not needed or optimal
+        if (player.getFoodLevel() > 20-foodlevel)
         {
             break;
         }
         else
         {
-            Client.waitTick(35);
+            Client.waitTick(20);
         }
     }
-    
-    KeyBind.key("key.mouse.right",false);
+    KeyBind.keyBind("key.use", false);
 }
 
 function Deposit()//deposits all the obby and cobble into the storage chest. generally the hopper minecarts would have collected them but you may collect a stack or two
@@ -154,7 +144,6 @@ function ObbyChest()//calls deposit and string chest functions
     Deposit();
     StringChest();
 }
-
 
 function StringChest()//calls obtain to get string. and invcheck for boolean
 {
@@ -226,8 +215,6 @@ function PickaxeSwap()//swaps a pickaxe that is near breaking. the pick swap hap
             inv.swap(i,81);
             break;
         }
-
-
     }
     if(i>=54){//if the for loop ended when i wasn't less than 54 the script will end because there was no picks detected
         Chat.log("NO PICKS LEFT");
@@ -243,7 +230,6 @@ function PickaxeSwap()//swaps a pickaxe that is near breaking. the pick swap hap
     }
     inv.close();
 }
-
 
 /*
 https://discord.com/channels/732004268948586545/745273698428387389/880942114681270273
@@ -275,53 +261,51 @@ function grabMouse() {
     lockMouse.setBoolean(mouseHandlerObj, true);
 }
 
-
 function breakBlock()//breaks according to what pick the user has defined
 {
+    if(pickaxeenchantment=="de3")
+    {
+        grabMouse();
+        KeyBind.keyBind("key.attack", true);
+        Client.waitTick(90);
+        KeyBind.keyBind("key.attack", false);
+    }
 
-        if(pickaxeenchantment=="de3")
-        {
-            grabMouse();
-            KeyBind.keyBind("key.attack", true);
-            Client.waitTick(90);
-            KeyBind.keyBind("key.attack", false);
-        }
-
-        else if(pickaxeenchantment=="de4")
-       {
-            grabMouse();
-            KeyBind.keyBind("key.attack", true);
-            Client.waitTick(70);
-            KeyBind.keyBind("key.attack", false);
-        }
-        else if(pickaxeenchantment=="de5")
-        {
-            grabMouse();
-            KeyBind.keyBind("key.attack", true);
-            Client.waitTick(50);
-            KeyBind.keyBind("key.attack", false);
-        }
-        else if(pickaxeenchantment=="ne3")
-        {
-            grabMouse();
-            KeyBind.keyBind("key.attack", true);
-            Client.waitTick(85);
-            KeyBind.keyBind("key.attack", false);
-        } 
-        else if(pickaxeenchantment=="ne4")
-        {
-            grabMouse();
-            KeyBind.keyBind("key.attack", true);
-            Client.waitTick(65);
-            KeyBind.keyBind("key.attack", false);
-        } 
-        else if(pickaxeenchantment=="ne5")
-        {
-            grabMouse();
-            KeyBind.keyBind("key.attack", true);
-            Client.waitTick(50);
-            KeyBind.keyBind("key.attack", false);
-        }
+    else if(pickaxeenchantment=="de4")
+    {
+        grabMouse();
+        KeyBind.keyBind("key.attack", true);
+        Client.waitTick(70);
+        KeyBind.keyBind("key.attack", false);
+    }
+    else if(pickaxeenchantment=="de5")
+    {
+        grabMouse();
+        KeyBind.keyBind("key.attack", true);
+        Client.waitTick(50);
+        KeyBind.keyBind("key.attack", false);
+    }
+    else if(pickaxeenchantment=="ne3")
+    {
+        grabMouse();
+        KeyBind.keyBind("key.attack", true);
+        Client.waitTick(85);
+        KeyBind.keyBind("key.attack", false);
+    } 
+    else if(pickaxeenchantment=="ne4")
+    {
+        grabMouse();
+        KeyBind.keyBind("key.attack", true);
+        Client.waitTick(65);
+        KeyBind.keyBind("key.attack", false);
+    } 
+    else if(pickaxeenchantment=="ne5")
+    {
+        grabMouse();
+        KeyBind.keyBind("key.attack", true);
+        Client.waitTick(50);
+        KeyBind.keyBind("key.attack", false);
+    }
 }
 
 function obbywalk()//walks around the grinder and uses the break function to break the obby
@@ -334,10 +318,10 @@ function obbywalk()//walks around the grinder and uses the break function to bre
     KeyBind.keyBind("key.right",false);
     breakBlock();
     for(let x=0;x<3;x++){
-    KeyBind.keyBind("key.right",true);
-    Client.waitTick(5);
-    KeyBind.keyBind("key.right",false);
-    breakBlock();
+        KeyBind.keyBind("key.right",true);
+        Client.waitTick(5);
+        KeyBind.keyBind("key.right",false);
+        breakBlock();
     }
     KeyBind.keyBind("key.right",true);
     Client.waitTick(15);
@@ -412,12 +396,11 @@ function main()//main function that is called at the start of the script
         //Chat.log("lap:"+lapcounter);
         let check=false;
         Client.waitTick();
-        if (player.getFoodLevel() <= (20-foodlevel)||(!(inv.getSlot(37).getItemID()==food)))//detects if the player needs to eat or get more food
+        if (player.getFoodLevel() > 20-foodlevel||(!(inv.getSlot(37).getItemID()==food)))//detects if the player needs to eat or get more food
         {
             if(!(inv.getSlot(37).getItemID()==food)){
                FoodChest();
             }
-            
             EatFood();
         }
         Client.waitTick();
@@ -447,7 +430,6 @@ function main()//main function that is called at the start of the script
                 {
                     check=true;
                 }
-                
             }
             inv.close();
         }
@@ -470,11 +452,7 @@ function main()//main function that is called at the start of the script
             Client.waitTick(20);
             obbywalk();
         }
-
     }
-
-
-
 }
 //exe
 main();
