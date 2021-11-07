@@ -1,5 +1,5 @@
 /*
-MechanicalRift's Obisdian Bot 2.1.4
+MechanicalRift's Obisdian Bot 2.1.5
 What it do: The Script automatically places string in a generator and breaks the obby that is generated
 Modifications:
 BUGS:
@@ -26,7 +26,7 @@ const username="Username Here";
 //if you want your bot to leave when there is no string left
 const leavecheck=true;
 
-const pickaxeenchantment="de4";
+const pickaxeenchantment="de5";
 
 /*
 You are gonna need to change this manually
@@ -50,8 +50,8 @@ let pickstringcheck=true;
 
 function InvCheck()//checks inventory for string
 {
-    KeyBind.key("key.mouse.right", true);
-    KeyBind.key("key.mouse.right", false);
+    KeyBind.keyBind("key.use", true);
+    KeyBind.keyBind("key.use", false);
     Client.waitTick(20);
     const inv = Player.openInventory();
     var count = 0;
@@ -99,8 +99,8 @@ function EatFood()//only eats at the most optimal
 
 function Deposit()//deposits all the obby and cobble into the storage chest. generally the hopper minecarts would have collected them but you may collect a stack or two
 {
-    KeyBind.key("key.mouse.right", true);
-    KeyBind.key("key.mouse.right", false);
+    KeyBind.keyBind("key.use", true);
+    KeyBind.keyBind("key.use", false);
     Client.waitTick(20);
     const inv = Player.openInventory();
     Client.waitTick(20);
@@ -109,18 +109,18 @@ function Deposit()//deposits all the obby and cobble into the storage chest. gen
         {
             //Chat.log(x);
             inv.quick(x);
-            Client.waitTick();
+            Client.waitTick(10);
         }
-        Client.waitTick();
+        Client.waitTick(10);
     }
     inv.close();
 }
 
 function Obtain()//gets string from the string chest if there is none in either inventories the script ends
 {
-    KeyBind.key("key.mouse.right", true);
-    KeyBind.key("key.mouse.right", false);
-    Client.waitTick(2);
+    KeyBind.keyBind("key.use", true);
+    KeyBind.keyBind("key.use", false);
+    Client.waitTick(10);
     const inv = Player.openInventory();
     for(let x=0,y=0;y<32&&x<54;x++){
         if (inv.getSlot(x).getItemID() == "minecraft:string")//if true plyaer gets string
@@ -140,7 +140,7 @@ function ObbyChest()//calls deposit and string chest functions
 {
     Chat.log("Storing Obsidian");
     player.lookAt(45, 0);
-    Client.waitTick();
+    Client.waitTick(10);
     Deposit();
     StringChest();
 }
@@ -149,7 +149,7 @@ function StringChest()//calls obtain to get string. and invcheck for boolean
 {
     Chat.log("Getting String");
     player.lookAt(-90, -45);
-    Client.waitTick();
+    Client.waitTick(10);
     Obtain();
     Chat.log("Checking amount of string");
     if(InvCheck())//if true goes to main. if false the script can:
@@ -177,34 +177,34 @@ function FoodChest()//moves food to 2nd slot from a chest
 {
     Chat.log("Getting Food");
     player.lookAt(0, -45);
-    Client.waitTick();
-    KeyBind.key("key.mouse.right", true);
-    KeyBind.key("key.mouse.right", false);
-    Client.waitTick(2);
+    Client.waitTick(10);
+    KeyBind.keyBind("key.use", true);
+    KeyBind.keyBind("key.use", false);
+    Client.waitTick(10);
     const inv = Player.openInventory();
     for(let x=0;x<54;x++){
         if (inv.getSlot(x).getItemID() == food)//if true food goes to 2nd hotbar slot
         {
             //Chat.log(x);
             inv.swap(x,82);
-            Client.waitTick();
+            Client.waitTick(10);
             break;
         }
-        Client.waitTick();
+        Client.waitTick(10);
     }
     inv.close();
-    Client.waitTick();
+    Client.waitTick(10);
 
 }
 
 function PickaxeSwap()//swaps a pickaxe that is near breaking. the pick swap happens before 10 durability is hit
 {
     Chat.log("Swapping Pickaxes");
-    Client.waitTick(5);
+    Client.waitTick(10);
     player.lookAt(-145, 0);
-    Client.waitTick();
-    KeyBind.key("key.mouse.right", true);
-    KeyBind.key("key.mouse.right", false);
+    Client.waitTick(10);
+    KeyBind.keyBind("key.use", true);
+    KeyBind.keyBind("key.use", false);
     Client.waitTick(10);
     const inv = Player.openInventory();
     let i=0;
@@ -395,15 +395,18 @@ function main()//main function that is called at the start of the script
         //lapcounter++;
         //Chat.log("lap:"+lapcounter);
         let check=false;
-        Client.waitTick();
-        if (player.getFoodLevel() > 20-foodlevel||(!(inv.getSlot(37).getItemID()==food)))//detects if the player needs to eat or get more food
+        Client.waitTick(10);
+        if ((player.getFoodLevel() < 20-foodlevel)||(!(inv.getSlot(37).getItemID()==food)))//detects if the player needs to eat or get more food
         {
             if(!(inv.getSlot(37).getItemID()==food)){
                FoodChest();
             }
-            EatFood();
+            if(player.getFoodLevel() < 20-foodlevel)
+            {
+                EatFood();
+            }
         }
-        Client.waitTick();
+        Client.waitTick(10);
         if(!(Player.openInventory().getSlot(36).getDamage()<durability))//detects if the player needs to swap pickaxes
         {
             PickaxeSwap();
@@ -412,7 +415,7 @@ function main()//main function that is called at the start of the script
                 break;
             }
         }
-        Client.waitTick();
+        Client.waitTick(10);
         if(!(inv.getSlot(38).getItemID()=="minecraft:string"))//moves the string to the 3rd slot on hotbar
         {
             for(let x=9;x<45;x++)
@@ -433,7 +436,7 @@ function main()//main function that is called at the start of the script
             }
             inv.close();
         }
-        Client.waitTick();
+        Client.waitTick(10);
         if(check){
             ObbyChest();
             if(!pickstringcheck)//breaks while-loop if there are no string. semi-useless.
@@ -441,7 +444,7 @@ function main()//main function that is called at the start of the script
                 break;
             }
         }
-        Client.waitTick();
+        Client.waitTick(10);
         if(pickstringcheck)//if true stringwalk and obbywalk will run. semi-useless.
         {
             stringwalk();
