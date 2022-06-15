@@ -63,7 +63,7 @@ function farmLine()
     Chat.log("Harvesting and replanting of row "+ line +" commenced!");
     
     KeyBind.keyBind("key.forward", true);
-    KeyBind.keyBind("key.interact", true);
+    KeyBind.keyBind("key.use", true);
    
     while (true)
     {
@@ -78,7 +78,7 @@ function farmLine()
     }
     
     KeyBind.keyBind("key.forward", false);
-    KeyBind.keyBind("key.interact", false);
+    KeyBind.keyBind("key.use", false);
     
     Client.waitTick();
     
@@ -103,7 +103,7 @@ function farmLine()
         
     // Move east and farm.
     KeyBind.keyBind("key.back", true);
-    KeyBind.keyBind("key.interact", true);
+    KeyBind.keyBind("key.use", true);
     
     while (true) {
         if (p.getPos().z >= zSouth + 0.5) {
@@ -112,7 +112,7 @@ function farmLine()
     }
     
     KeyBind.keyBind("key.back", false);
-    KeyBind.keyBind("key.interact", false);
+    KeyBind.keyBind("key.use", false);
 }
 
 // Checks for player's food level.
@@ -176,7 +176,7 @@ function swapFromMain(item)
 
 function dumpCrops()
 {
-    p.lookAt(180, 55);
+    p.lookAt(180, 76);
     
     Client.waitTick(20);
     
@@ -234,7 +234,7 @@ function farmLines()
             Client.waitTick(220);
         }
             
-        Chat.log("Row "+ line +" finished! Moving on to row "+ newLine +"!");
+        Chat.log("Row "+ line+1 +" finished! Moving on to row "+ newLine +"!");
             
         KeyBind.keyBind("key.right", true);
         line = line + 2;
