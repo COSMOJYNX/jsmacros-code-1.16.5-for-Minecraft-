@@ -1,5 +1,5 @@
 // HuM4nB31nG's Crop Bot
-// Modified by Mokotowskie
+// Modified by Mokotowskie, MechanicalRift
 // Used for any of the major crop farms (potato, wheat, carrot, beet)
 // Modified to be able to shift-click items into chests and auto-resume harvesting/replanting.
 
@@ -10,7 +10,7 @@
 
 // Boundaries of the beetroot farm.
 
-const xEast = 6384
+const xEast = 6384;
 const xWest = 6225;
 const zNorth = -1426;
 const zSouth = -1303;
@@ -176,22 +176,16 @@ function swapFromMain(item)
 
 function dumpCrops()
 {
-    p.lookAt(180, 76);
+    p.lookAt(180, 0);
     
     Client.waitTick(20);
     
     const inv = Player.openInventory();
     
+    //dumps wheat seeds into the water storeage behind the chests
     for (let i = 9; i < 45; i++)
     {
         if (inv.getSlot(i).getItemID() == "minecraft:wheat_seeds")
-        {
-            inv.click(i);
-            Client.waitTick();
-            inv.click(-999);
-            Client.waitTick();
-        }
-        else if (inv.getSlot(i).getItemID() == "minecraft:wheat")
         {
             inv.click(i);
             Client.waitTick();
@@ -203,6 +197,34 @@ function dumpCrops()
             Client.waitTick();
         }
     }
+    
+    Client.waitTick();
+    
+    //mechanical's storage method from old obby script
+    //stores the wheat into the chest
+    p.lookAt(180, 45);
+    Client.waitTick(20);
+    KeyBind.key("key.mouse.right", true);
+    KeyBind.key("key.mouse.right", false);
+    Client.waitTick(60);
+    //YES IT REQURIES THE INVS CAUSE JSMACROS IS FUCKING RETARDED
+    const invs = Player.openInventory();
+    Client.waitTick(10);
+    for(let x=54;x<90;x++){
+        Client.waitTick();
+        if ((invs.getSlot(x).getItemID() == "minecraft:wheat"))
+        {
+            //Chat.log(x);
+            invs.quick(x);
+            Client.waitTick();
+        }
+        Client.waitTick();
+    }
+    
+    inv.close();
+
+    Client.waitTick();
+    p.lookAt(180, 90);
     Client.waitTick();
 }
 
